@@ -3,33 +3,45 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Артём + Арина 🤍</title>
 <style>
+:root{--rose:#a85d68;--ink:#332d2d;--muted:#8b7d7d}
 *{box-sizing:border-box}
-body{margin:0;background:#f8f5f2;color:#332d2d;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;padding:24px 16px}
-main{max-width:520px;margin:0 auto}
-header{text-align:center;padding:22px 0 26px}
+body{margin:0;padding:16px 12px 32px;background:#f8f5f2;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
+main{max-width:560px;margin:auto}
+header{text-align:center;padding:20px 0 24px}
 .heart{font-size:35px}
-h1{font-size:30px;margin:10px 0 8px}
-.subtitle{color:#8b7d7d;font-size:14px}
-.card{background:#fff;border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:0 5px 24px #3b202008}
-label{display:block;font-size:13px;color:#887878;margin-bottom:8px}
-input,textarea,select{width:100%;border:1px solid #eadfdd;background:#fffdfc;border-radius:12px;padding:13px;font:inherit;color:#332d2d;outline:none}
-textarea{resize:vertical;min-height:85px}
-button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:600;cursor:pointer}
-.add{background:#a85d68;color:white;width:100%;margin-top:12px}
-h2{font-size:18px;margin:0 0 15px}
-.note{border:1px solid #f0e7e4;border-radius:14px;padding:13px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
-.note input{width:19px;height:19px;margin-top:3px;accent-color:#a85d68;flex-shrink:0}
-.note-body{flex:1;min-width:0;overflow-wrap:anywhere}
-.note-text{white-space:pre-wrap;line-height:1.45}
+h1{font-size:29px;margin:8px 0}
+.subtitle{color:var(--muted);font-size:14px}
+.card{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 5px 24px #3b202008}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
+textarea,select{width:100%;border:1px solid #eadfdd;background:#fffdfc;border-radius:12px;padding:12px;font:inherit;color:var(--ink)}
+textarea{resize:vertical;min-height:78px}
+button{border:0;border-radius:12px;padding:12px;font:inherit;font-weight:600;cursor:pointer}
+.primary{background:var(--rose);color:white;width:100%;margin-top:10px}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.secondary{background:#f8eeee;color:var(--rose);width:100%}
+#fileInput{display:none}
+#preview{display:none;margin-top:10px;max-width:100%;max-height:180px;border-radius:12px}
+#recording{display:none;color:#a13f4d;font-size:13px;margin-top:9px}
+h2{font-size:18px;margin:0 0 12px}
+.note{border:1px solid #f0e7e4;border-radius:15px;padding:12px;margin-top:10px;display:flex;gap:9px;align-items:flex-start;background:#fff}
+.avatar{width:42px;height:42px;flex:0 0 42px;border-radius:50%;object-fit:cover;background:#f2e6e4;border:1px solid #f0e7e4}
+.note-main{flex:1;min-width:0}
+.note-head{display:flex;align-items:center;font-size:13px;font-weight:700;margin:2px 0 7px}
+.note-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.45}
+.meta{font-size:11px;color:#9b8c8c;margin-top:7px}
 .note.done .note-text{text-decoration:line-through;color:#a99d9d}
-.meta{font-size:12px;color:#9b8c8c;margin-top:7px}
-.del{background:#f8eeee;color:#a85d68;padding:6px 10px;font-size:12px}
-.empty{text-align:center;color:#a39393;padding:22px 4px;font-size:14px}
-.status{text-align:center;color:#998888;font-size:12px;padding:8px}
+.attachment{display:block;max-width:100%;max-height:330px;border-radius:12px;margin-top:10px}
+audio{width:100%;margin-top:10px}
+.actions{display:flex;gap:5px;align-items:center}
+.check{width:18px;height:18px;accent-color:var(--rose);margin-top:4px}
+.del{background:#f8eeee;color:var(--rose);padding:6px 8px;font-size:12px}
+.empty{text-align:center;color:#a39393;padding:20px 4px;font-size:14px}
+.status{text-align:center;color:#998888;font-size:12px;padding:8px;line-height:1.5}
 .small{font-size:12px;color:#9b8c8c;text-align:center;line-height:1.5}
+button:disabled{opacity:.55}
 </style>
 </head>
 <body>
@@ -43,174 +55,330 @@ h2{font-size:18px;margin:0 0 15px}
 <section class="card">
 <label for="author">Кто добавляет?</label>
 <select id="author">
-<option>Артём</option>
-<option>Арина</option>
+<option value="Артём">Артём</option>
+<option value="Арина">Арина</option>
 </select>
-<div style="height:14px"></div>
-<label for="note">Что хотим сделать при встрече?</label>
+<div style="height:13px"></div>
+<label for="note">Что хотим сделать или сказать?</label>
 <textarea id="note" placeholder="Например: гулять ночью у моря, обняться и никуда не спешить..."></textarea>
-<button class="add" id="add">Добавить в наш список 🤍</button>
+<input id="fileInput" type="file" accept="image/*">
+<img id="preview" alt="Предпросмотр фото">
+<div class="tools">
+<button class="secondary" id="photoBtn">📷 Добавить фото</button>
+<button class="secondary" id="recordBtn">🎙 Записать голосовое</button>
+</div>
+<div id="recording">● Идёт запись голосового…</div>
+<div class="tools" id="recordTools" style="display:none">
+<button class="secondary" id="stopBtn">■ Остановить запись</button>
+<button class="secondary" id="cancelBtn">Отменить запись</button>
+</div>
+<button class="primary" id="addBtn">Добавить в наш список 🤍</button>
 </section>
 
 <section class="card">
 <h2>Наши планы ✨</h2>
-<div id="notes"><div class="empty">Загружаем ваш список…</div></div>
+<div id="notes"><div class="empty">Загружаем список…</div></div>
 </section>
-
 <div class="status" id="status">Подключение…</div>
 <p class="small">Ваше маленькое место для всего, что хочется сделать вместе.</p>
 </main>
 
 <script>
-const SUPABASE_URL = "https://mtxzkfbryzdlsrpsykqj.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_zKwooYPU5_sujM0mL5Iw_g__xNi0FRW";
-const ROOM_ID = "artem-arina-private-room-7f3a9c2d-2026";
+const URL_BASE = "https://mtxzkfbryzdlsrpsykqj.supabase.co";
+const KEY = "sb_publishable_zKwooYPU5_sujM0mL5Iw_g__xNi0FRW";
+const ROOM = "artem-arina-private-room-7f3a9c2d-2026";
+const BUCKET = "couple-photos";
+
+const AVATARS = {
+  "Артём": URL_BASE + "/storage/v1/object/public/" + BUCKET + "/5ECA4233-7031-4523-829D-4BB2D340F5B2.png",
+  "Арина": URL_BASE + "/storage/v1/object/public/" + BUCKET + "/camphoto_959030623.jpeg"
+};
+
+const $ = id => document.getElementById(id);
+const notesEl = $("notes");
+const statusEl = $("status");
+const authorEl = $("author");
+const noteEl = $("note");
+const fileInput = $("fileInput");
+const preview = $("preview");
+const addBtn = $("addBtn");
+let busy = false;
+let selectedFile = null;
+let recorder = null;
+let chunks = [];
+let stream = null;
+let recordingCancelled = false;
 
 const headers = {
-  "apikey": SUPABASE_ANON_KEY,
-  "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+  apikey: KEY,
+  Authorization: "Bearer " + KEY,
   "Content-Type": "application/json"
 };
 
-const notesEl = document.getElementById("notes");
-const statusEl = document.getElementById("status");
-const authorEl = document.getElementById("author");
-const noteEl = document.getElementById("note");
-let busy = false;
-
 function escapeHTML(s) {
-  return String(s).replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
   }[c]));
 }
 
-async function request(path, options = {}) {
-  const response = await fetch(SUPABASE_URL + "/rest/v1/" + path, {
+async function api(path, options = {}) {
+  const response = await fetch(URL_BASE + "/rest/v1/" + path, {
     ...options,
     headers: {...headers, ...(options.headers || {})}
   });
-
-  if (!response.ok) {
-    const msg = await response.text();
-    throw new Error(msg || "Ошибка соединения");
-  }
-
+  if (!response.ok) throw new Error(await response.text());
   if (response.status === 204) return null;
-  return response.json();
+  const body = await response.text();
+  return body ? JSON.parse(body) : null;
 }
 
 async function loadNotes() {
   if (busy) return;
-
   try {
-    const data = await request(
-      "couple_notes?room_id=eq." +
-      encodeURIComponent(ROOM_ID) +
-      "&select=id,text,author,done,created_at&order=created_at.desc"
+    const items = await api(
+      "couple_notes?room_id=eq." + encodeURIComponent(ROOM) +
+      "&select=id,text,author,done,created_at,attachment_url,attachment_type&order=created_at.desc"
     );
-
-    renderNotes(data || []);
+    render(items || []);
     statusEl.textContent = "Список синхронизирован 🤍";
-  } catch (error) {
-    statusEl.textContent = "Ошибка загрузки. Проверь настройки Supabase.";
-    console.error(error);
+  } catch (e) {
+    console.error(e);
+    statusEl.textContent = "Ошибка загрузки. " +
+      (String(e.message).includes("attachment_url")
+       ? "Проверь столбцы вложений в Supabase."
+       : "Проверь настройки Supabase.");
   }
 }
 
-function renderNotes(items) {
+function render(items) {
   if (!items.length) {
-    notesEl.innerHTML =
-      '<div class="empty">Пока здесь пусто. Добавьте первое желание 🤍</div>';
+    notesEl.innerHTML = '<div class="empty">Пока здесь пусто. Добавьте первое желание 🤍</div>';
     return;
   }
 
-  notesEl.innerHTML = items.map(item => `
-    <div class="note ${item.done ? "done" : ""}">
-      <input type="checkbox"
-        aria-label="Выполнено"
-        ${item.done ? "checked" : ""}
-        onchange="toggleNote(${Number(item.id)},this.checked)">
-      <div class="note-body">
-        <div class="note-text">${escapeHTML(item.text)}</div>
-        <div class="meta">${escapeHTML(item.author || "Мы")}</div>
+  notesEl.innerHTML = items.map(item => {
+    const author = item.author === "Арина" ? "Арина" : "Артём";
+    const avatar = AVATARS[author];
+    let attachment = "";
+    const url = item.attachment_url || "";
+
+    if (url && item.attachment_type === "image") {
+      attachment = `<a href="${escapeHTML(url)}" target="_blank" rel="noopener"><img class="attachment" src="${escapeHTML(url)}" alt="Фото" loading="lazy"></a>`;
+    } else if (url && item.attachment_type === "audio") {
+      attachment = `<audio controls preload="none" src="${escapeHTML(url)}"></audio>`;
+    }
+
+    const date = item.created_at
+      ? new Date(item.created_at).toLocaleString("ru-RU", {
+          day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"
+        })
+      : "";
+
+    return `<article class="note ${item.done ? "done" : ""}">
+      <img class="avatar" src="${escapeHTML(avatar)}" alt="${escapeHTML(author)}">
+      <div class="note-main">
+        <div class="note-head">${escapeHTML(author)}</div>
+        ${item.text ? `<div class="note-text">${escapeHTML(item.text)}</div>` : ""}
+        ${attachment}
+        <div class="meta">${escapeHTML(date)}</div>
       </div>
-      <button class="del"
-        onclick="deleteNote(${Number(item.id)})">✕</button>
-    </div>
-  `).join("");
+      <div class="actions">
+        <input class="check" type="checkbox" aria-label="Выполнено"
+          ${item.done ? "checked" : ""}
+          onchange="toggleNote(${Number(item.id)},this.checked)">
+        <button class="del" onclick="deleteNote(${Number(item.id)})">✕</button>
+      </div>
+    </article>`;
+  }).join("");
 }
 
-document.getElementById("add").addEventListener("click", async () => {
-  const text = noteEl.value.trim();
+$("photoBtn").addEventListener("click", () => {
+  fileInput.accept = "image/*";
+  fileInput.click();
+});
 
-  if (!text) {
-    noteEl.focus();
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files && fileInput.files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) {
+    statusEl.textContent = "Выбери изображение.";
+    return;
+  }
+  if (file.size > 15 * 1024 * 1024) {
+    statusEl.textContent = "Фото должно быть меньше 15 МБ.";
+    fileInput.value = "";
+    return;
+  }
+  selectedFile = file;
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+  statusEl.textContent = "Фото выбрано. Теперь нажми «Добавить в наш список».";
+});
+
+function showRecording(active) {
+  $("recording").style.display = active ? "block" : "none";
+  $("recordTools").style.display = active ? "grid" : "none";
+  $("recordBtn").style.display = active ? "none" : "block";
+}
+
+$("recordBtn").addEventListener("click", async () => {
+  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+    statusEl.textContent = "Запись не поддерживается. Открой сайт в Safari на iPhone.";
+    return;
+  }
+
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    let mime = "";
+    if (MediaRecorder.isTypeSupported("audio/mp4")) mime = "audio/mp4";
+    else if (MediaRecorder.isTypeSupported("audio/webm")) mime = "audio/webm";
+
+    recorder = new MediaRecorder(stream, mime ? {mimeType:mime} : undefined);
+    chunks = [];
+    recordingCancelled = false;
+
+    recorder.ondataavailable = e => {
+      if (e.data && e.data.size) chunks.push(e.data);
+    };
+
+    recorder.onstop = () => {
+      if (!recordingCancelled && chunks.length) {
+        const type = recorder.mimeType || "audio/mp4";
+        const ext = type.includes("webm") ? "webm" : "m4a";
+        selectedFile = new File(chunks, "voice-message." + ext, {type});
+        preview.style.display = "none";
+        statusEl.textContent = "Голосовое готово. Нажми «Добавить в наш список».";
+      } else {
+        statusEl.textContent = "Запись отменена.";
+      }
+      if (stream) stream.getTracks().forEach(t => t.stop());
+      stream = null;
+      showRecording(false);
+    };
+
+    recorder.start();
+    showRecording(true);
+    statusEl.textContent = "Идёт запись…";
+  } catch (e) {
+    console.error(e);
+    statusEl.textContent = "Нет доступа к микрофону. Разреши доступ в настройках браузера.";
+  }
+});
+
+$("stopBtn").addEventListener("click", () => {
+  if (recorder && recorder.state !== "inactive") recorder.stop();
+});
+
+$("cancelBtn").addEventListener("click", () => {
+  recordingCancelled = true;
+  if (recorder && recorder.state !== "inactive") recorder.stop();
+  else showRecording(false);
+});
+
+async function upload(file) {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = ROOM + "/" + Date.now() + "-" +
+    Math.random().toString(36).slice(2, 9) + "-" + safeName;
+
+  const response = await fetch(
+    URL_BASE + "/storage/v1/object/" + BUCKET + "/" +
+    path.split("/").map(encodeURIComponent).join("/"),
+    {
+      method:"POST",
+      headers:{
+        apikey:KEY,
+        Authorization:"Bearer " + KEY,
+        "Content-Type":file.type || "application/octet-stream"
+      },
+      body:file
+    }
+  );
+
+  if (!response.ok) throw new Error(await response.text());
+  return URL_BASE + "/storage/v1/object/public/" + BUCKET + "/" +
+    path.split("/").map(encodeURIComponent).join("/");
+}
+
+$("addBtn").addEventListener("click", async () => {
+  const text = noteEl.value.trim();
+  const file = selectedFile;
+
+  if (!text && !file) {
+    statusEl.textContent = "Напиши текст или прикрепи фото/голосовое.";
     return;
   }
 
   busy = true;
-  statusEl.textContent = "Добавляем…";
+  addBtn.disabled = true;
 
   try {
-    await request("couple_notes", {
-      method: "POST",
-      headers: {"Prefer": "return=minimal"},
-      body: JSON.stringify({
-        room_id: ROOM_ID,
-        text: text,
-        author: authorEl.value,
-        done: false
+    let attachment_url = null;
+    let attachment_type = null;
+
+    if (file) {
+      statusEl.textContent = "Загружаем файл…";
+      attachment_url = await upload(file);
+      if (file.type.startsWith("image/")) attachment_type = "image";
+      else if (file.type.startsWith("audio/")) attachment_type = "audio";
+      else throw new Error("Формат вложения не поддерживается.");
+    }
+
+    statusEl.textContent = "Сохраняем запись…";
+    await api("couple_notes", {
+      method:"POST",
+      headers:{"Prefer":"return=minimal"},
+      body:JSON.stringify({
+        room_id:ROOM,
+        text,
+        author:authorEl.value,
+        done:false,
+        attachment_url,
+        attachment_type
       })
     });
 
     noteEl.value = "";
+    fileInput.value = "";
+    selectedFile = null;
+    preview.removeAttribute("src");
+    preview.style.display = "none";
     await loadNotes();
-  } catch (error) {
-    statusEl.textContent =
-      "Не получилось добавить. Проверь настройки Supabase.";
-    console.error(error);
+  } catch (e) {
+    console.error(e);
+    statusEl.textContent = "Не получилось сохранить. " +
+      (String(e.message).includes("row-level security")
+       ? "Нужно проверить разрешения Supabase."
+       : String(e.message).slice(0,180));
   } finally {
     busy = false;
+    addBtn.disabled = false;
   }
 });
 
 window.toggleNote = async (id, done) => {
   try {
-    await request(
-      "couple_notes?id=eq." + id +
-      "&room_id=eq." + encodeURIComponent(ROOM_ID),
-      {
-        method: "PATCH",
-        headers: {"Prefer": "return=minimal"},
-        body: JSON.stringify({done: done})
-      }
-    );
-
+    await api("couple_notes?id=eq." + id +
+      "&room_id=eq." + encodeURIComponent(ROOM), {
+      method:"PATCH",
+      headers:{"Prefer":"return=minimal"},
+      body:JSON.stringify({done})
+    });
     await loadNotes();
-  } catch (error) {
-    statusEl.textContent = "Не удалось обновить заметку.";
-    console.error(error);
+  } catch (e) {
+    statusEl.textContent = "Не удалось обновить запись.";
+    console.error(e);
   }
 };
 
-window.deleteNote = async (id) => {
-  if (!confirm("Удалить эту запись из вашего списка?")) return;
-
+window.deleteNote = async id => {
+  if (!confirm("Удалить эту запись?")) return;
   try {
-    await request(
-      "couple_notes?id=eq." + id +
-      "&room_id=eq." + encodeURIComponent(ROOM_ID),
-      {method: "DELETE"}
-    );
-
+    await api("couple_notes?id=eq." + id +
+      "&room_id=eq." + encodeURIComponent(ROOM), {method:"DELETE"});
     await loadNotes();
-  } catch (error) {
-    statusEl.textContent = "Не удалось удалить заметку.";
-    console.error(error);
+  } catch (e) {
+    statusEl.textContent = "Не удалось удалить запись.";
+    console.error(e);
   }
 };
 
