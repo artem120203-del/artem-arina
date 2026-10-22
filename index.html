@@ -19,8 +19,6 @@ input,textarea,select{width:100%;border:1px solid #eadfdd;background:#fffdfc;bor
 textarea{resize:vertical;min-height:85px}
 button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:600;cursor:pointer}
 .add{background:#a85d68;color:white;width:100%;margin-top:12px}
-.row{display:flex;gap:10px;margin-top:12px}
-.row>*{flex:1;min-width:0}
 h2{font-size:18px;margin:0 0 15px}
 .note{border:1px solid #f0e7e4;border-radius:14px;padding:13px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
 .note input{width:19px;height:19px;margin-top:3px;accent-color:#a85d68;flex-shrink:0}
@@ -65,7 +63,7 @@ h2{font-size:18px;margin:0 0 15px}
 
 <script>
 const SUPABASE_URL = "https://mtxzkfbryzdlsrpsykqj.supabase.co";
-const SUPABASE_ANON_KEY = "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE";
+const SUPABASE_ANON_KEY = "sb_publishable_zKwooYPU5_sujM0mL5Iw_g__xNi0FRW";
 const ROOM_ID = "artem-arina-private-room-7f3a9c2d-2026";
 
 const headers = {
@@ -82,8 +80,11 @@ let busy = false;
 
 function escapeHTML(s) {
   return String(s).replace(/[&<>"']/g, c => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;",
-    '"':"&quot;", "'":"&#39;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
   }[c]));
 }
 
@@ -92,75 +93,85 @@ async function request(path, options = {}) {
     ...options,
     headers: {...headers, ...(options.headers || {})}
   });
+
   if (!response.ok) {
     const msg = await response.text();
     throw new Error(msg || "Ошибка соединения");
   }
+
   if (response.status === 204) return null;
   return response.json();
 }
 
 async function loadNotes() {
   if (busy) return;
+
   try {
     const data = await request(
-      "couple_notes?room_id=eq." + encodeURIComponent(ROOM_ID) +
+      "couple_notes?room_id=eq." +
+      encodeURIComponent(ROOM_ID) +
       "&select=id,text,author,done,created_at&order=created_at.desc"
     );
+
     renderNotes(data || []);
     statusEl.textContent = "Список синхронизирован 🤍";
   } catch (error) {
-    statusEl.textContent = "Ошибка загрузки. Проверь ключ и настройки Supabase.";
+    statusEl.textContent = "Ошибка загрузки. Проверь настройки Supabase.";
     console.error(error);
   }
 }
 
 function renderNotes(items) {
   if (!items.length) {
-    notesEl.innerHTML = '<div class="empty">Пока здесь пусто. Добавьте первое желание 🤍</div>';
+    notesEl.innerHTML =
+      '<div class="empty">Пока здесь пусто. Добавьте первое желание 🤍</div>';
     return;
   }
+
   notesEl.innerHTML = items.map(item => `
     <div class="note ${item.done ? "done" : ""}">
-      <input type="checkbox" aria-label="Выполнено"
+      <input type="checkbox"
+        aria-label="Выполнено"
         ${item.done ? "checked" : ""}
         onchange="toggleNote(${Number(item.id)},this.checked)">
       <div class="note-body">
         <div class="note-text">${escapeHTML(item.text)}</div>
         <div class="meta">${escapeHTML(item.author || "Мы")}</div>
       </div>
-      <button class="del" onclick="deleteNote(${Number(item.id)})">✕</button>
+      <button class="del"
+        onclick="deleteNote(${Number(item.id)})">✕</button>
     </div>
   `).join("");
 }
 
 document.getElementById("add").addEventListener("click", async () => {
   const text = noteEl.value.trim();
+
   if (!text) {
     noteEl.focus();
     return;
   }
-  if (SUPABASE_ANON_KEY === "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE") {
-    statusEl.textContent = "Сначала вставь ключ Supabase в код.";
-    return;
-  }
+
   busy = true;
   statusEl.textContent = "Добавляем…";
+
   try {
     await request("couple_notes", {
       method: "POST",
-      headers: {"Prefer":"return=minimal"},
+      headers: {"Prefer": "return=minimal"},
       body: JSON.stringify({
         room_id: ROOM_ID,
-        text,
+        text: text,
         author: authorEl.value,
         done: false
       })
     });
+
     noteEl.value = "";
     await loadNotes();
   } catch (error) {
-    statusEl.textContent = "Не получилось добавить. Проверь настройки Supabase.";
+    statusEl.textContent =
+      "Не получилось добавить. Проверь настройки Supabase.";
     console.error(error);
   } finally {
     busy = false;
@@ -169,26 +180,37 @@ document.getElementById("add").addEventListener("click", async () => {
 
 window.toggleNote = async (id, done) => {
   try {
-    await request("couple_notes?id=eq." + id + "&room_id=eq." + encodeURIComponent(ROOM_ID), {
-      method: "PATCH",
-      headers: {"Prefer":"return=minimal"},
-      body: JSON.stringify({done})
-    });
+    await request(
+      "couple_notes?id=eq." + id +
+      "&room_id=eq." + encodeURIComponent(ROOM_ID),
+      {
+        method: "PATCH",
+        headers: {"Prefer": "return=minimal"},
+        body: JSON.stringify({done: done})
+      }
+    );
+
     await loadNotes();
   } catch (error) {
     statusEl.textContent = "Не удалось обновить заметку.";
+    console.error(error);
   }
 };
 
 window.deleteNote = async (id) => {
   if (!confirm("Удалить эту запись из вашего списка?")) return;
+
   try {
-    await request("couple_notes?id=eq." + id + "&room_id=eq." + encodeURIComponent(ROOM_ID), {
-      method: "DELETE"
-    });
+    await request(
+      "couple_notes?id=eq." + id +
+      "&room_id=eq." + encodeURIComponent(ROOM_ID),
+      {method: "DELETE"}
+    );
+
     await loadNotes();
   } catch (error) {
     statusEl.textContent = "Не удалось удалить заметку.";
+    console.error(error);
   }
 };
 
