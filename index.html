@@ -3,165 +3,197 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Артём + Арина 🤍</title>
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;background:#f7f2ea;color:#332b27;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-main{max-width:600px;margin:auto;padding:35px 20px 50px}
-header{text-align:center;padding:25px 0 35px}
-.small{font-size:11px;letter-spacing:3px;color:#a47a70}
-h1{font-family:Georgia,serif;font-weight:400;font-size:43px;margin:20px 0 12px}
-.subtitle{color:#897a71;font-size:14px;line-height:1.7}
-.card{background:#fffdf9;border:1px solid #eadfd3;border-radius:20px;padding:20px;margin-bottom:22px}
-h2{font-size:18px;font-weight:600;margin:0 0 16px}
-textarea,select{
-  width:100%;padding:14px;border:1px solid #e7dcd0;
-  border-radius:12px;background:white;font:inherit;color:#332b27;
-}
-textarea{min-height:100px;resize:vertical}
-label{display:block;font-size:13px;color:#817168;margin:13px 0 8px}
-button{font:inherit;cursor:pointer;border:0;border-radius:12px;padding:14px}
-.add{width:100%;margin-top:14px;background:#b77b70;color:white}
-.add:hover{background:#a66b60}
-.heading{display:flex;justify-content:space-between;align-items:center;margin:30px 2px 15px}
-.heading h2{margin:0}.count{font-size:12px;color:#a18f84}
-.item{display:flex;align-items:flex-start;gap:12px;background:#fffdf9;border:1px solid #eadfd3;border-radius:15px;padding:15px;margin-bottom:10px}
-.check{width:23px;height:23px;flex-shrink:0;border:1px solid #cdbdb0;border-radius:50%;padding:0;background:transparent;color:white}
-.check.done{background:#71856d;border-color:#71856d}
-.content{flex:1;min-width:0;overflow-wrap:anywhere;white-space:pre-wrap}
-.meta{font-size:12px;color:#a18f84;margin-top:8px}
-.item.finished .content{text-decoration:line-through;color:#a18f84}
-.remove{background:transparent;color:#a18f84;font-size:21px;padding:0 4px}
-.empty{text-align:center;color:#a18f84;padding:25px 12px;border:1px dashed #d8c8b9;border-radius:15px;font-size:14px}
-footer{text-align:center;color:#a18f84;font-size:12px;margin-top:35px}
+body{margin:0;background:#f8f5f2;color:#332d2d;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;padding:24px 16px}
+main{max-width:520px;margin:0 auto}
+header{text-align:center;padding:22px 0 26px}
+.heart{font-size:35px}
+h1{font-size:30px;margin:10px 0 8px}
+.subtitle{color:#8b7d7d;font-size:14px}
+.card{background:#fff;border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:0 5px 24px #3b202008}
+label{display:block;font-size:13px;color:#887878;margin-bottom:8px}
+input,textarea,select{width:100%;border:1px solid #eadfdd;background:#fffdfc;border-radius:12px;padding:13px;font:inherit;color:#332d2d;outline:none}
+textarea{resize:vertical;min-height:85px}
+button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:600;cursor:pointer}
+.add{background:#a85d68;color:white;width:100%;margin-top:12px}
+.row{display:flex;gap:10px;margin-top:12px}
+.row>*{flex:1;min-width:0}
+h2{font-size:18px;margin:0 0 15px}
+.note{border:1px solid #f0e7e4;border-radius:14px;padding:13px;margin-top:10px;display:flex;gap:10px;align-items:flex-start}
+.note input{width:19px;height:19px;margin-top:3px;accent-color:#a85d68;flex-shrink:0}
+.note-body{flex:1;min-width:0;overflow-wrap:anywhere}
+.note-text{white-space:pre-wrap;line-height:1.45}
+.note.done .note-text{text-decoration:line-through;color:#a99d9d}
+.meta{font-size:12px;color:#9b8c8c;margin-top:7px}
+.del{background:#f8eeee;color:#a85d68;padding:6px 10px;font-size:12px}
+.empty{text-align:center;color:#a39393;padding:22px 4px;font-size:14px}
+.status{text-align:center;color:#998888;font-size:12px;padding:8px}
+.small{font-size:12px;color:#9b8c8c;text-align:center;line-height:1.5}
 </style>
 </head>
 <body>
 <main>
 <header>
-  <div class="small">НАШ МАЛЕНЬКИЙ МИР</div>
-  <h1>Артём + Арина</h1>
-  <div class="subtitle">
-    Всё, что мы сделаем,<br>
-    когда будем рядом 🤍
-  </div>
+<div class="heart">🤍</div>
+<h1>Артём + Арина</h1>
+<div class="subtitle">Наш список маленьких и больших планов</div>
 </header>
 
 <section class="card">
-  <h2>Добавить желание</h2>
-  <textarea id="note" maxlength="1000"
-    placeholder="Что хочешь сделать вместе?"></textarea>
-  <label for="author">Кто добавляет?</label>
-  <select id="author">
-    <option value="Артём">Артём</option>
-    <option value="Арина">Арина</option>
-  </select>
-  <button class="add" id="add">Добавить в наш список +</button>
+<label for="author">Кто добавляет?</label>
+<select id="author">
+<option>Артём</option>
+<option>Арина</option>
+</select>
+<div style="height:14px"></div>
+<label for="note">Что хотим сделать при встрече?</label>
+<textarea id="note" placeholder="Например: гулять ночью у моря, обняться и никуда не спешить..."></textarea>
+<button class="add" id="add">Добавить в наш список 🤍</button>
 </section>
 
-<div class="heading">
-  <h2>Наши желания</h2>
-  <span class="count" id="count">0 идей</span>
-</div>
+<section class="card">
+<h2>Наши планы ✨</h2>
+<div id="notes"><div class="empty">Загружаем ваш список…</div></div>
+</section>
 
-<div id="list"></div>
-
-<footer>Не забыть. Сделать вместе. Вспоминать 🤍</footer>
+<div class="status" id="status">Подключение…</div>
+<p class="small">Ваше маленькое место для всего, что хочется сделать вместе.</p>
 </main>
 
 <script>
-const KEY = "artem-arina-wishes";
-let wishes = [];
+const SUPABASE_URL = "https://mtxzkfbryzdlsrpsykqj.supabase.co";
+const SUPABASE_ANON_KEY = "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE";
+const ROOM_ID = "artem-arina-private-room-7f3a9c2d-2026";
 
-try {
-  wishes = JSON.parse(localStorage.getItem(KEY) || "[]");
-  if (!Array.isArray(wishes)) wishes = [];
-} catch {
-  wishes = [];
+const headers = {
+  "apikey": SUPABASE_ANON_KEY,
+  "Authorization": "Bearer " + SUPABASE_ANON_KEY,
+  "Content-Type": "application/json"
+};
+
+const notesEl = document.getElementById("notes");
+const statusEl = document.getElementById("status");
+const authorEl = document.getElementById("author");
+const noteEl = document.getElementById("note");
+let busy = false;
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  }[c]));
 }
 
-const $ = id => document.getElementById(id);
-
-function save() {
-  localStorage.setItem(KEY, JSON.stringify(wishes));
-  render();
+async function request(path, options = {}) {
+  const response = await fetch(SUPABASE_URL + "/rest/v1/" + path, {
+    ...options,
+    headers: {...headers, ...(options.headers || {})}
+  });
+  if (!response.ok) {
+    const msg = await response.text();
+    throw new Error(msg || "Ошибка соединения");
+  }
+  if (response.status === 204) return null;
+  return response.json();
 }
 
-function render() {
-  const count = wishes.length;
-  $("count").textContent =
-    count + " " + (count % 10 === 1 && count % 100 !== 11
-      ? "идея"
-      : [2,3,4].includes(count % 10) &&
-        ![12,13,14].includes(count % 100) ? "идеи" : "идей");
+async function loadNotes() {
+  if (busy) return;
+  try {
+    const data = await request(
+      "couple_notes?room_id=eq." + encodeURIComponent(ROOM_ID) +
+      "&select=id,text,author,done,created_at&order=created_at.desc"
+    );
+    renderNotes(data || []);
+    statusEl.textContent = "Список синхронизирован 🤍";
+  } catch (error) {
+    statusEl.textContent = "Ошибка загрузки. Проверь ключ и настройки Supabase.";
+    console.error(error);
+  }
+}
 
-  if (!count) {
-    $("list").innerHTML =
-      '<div class="empty">Пока здесь пусто.<br>Добавьте первое желание 🤍</div>';
+function renderNotes(items) {
+  if (!items.length) {
+    notesEl.innerHTML = '<div class="empty">Пока здесь пусто. Добавьте первое желание 🤍</div>';
     return;
   }
-
-  const esc = value => String(value).replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  })[c]);
-
-  $("list").innerHTML = wishes.map(w => `
-    <div class="item ${w.done ? "finished" : ""}">
-      <button class="check ${w.done ? "done" : ""}"
-        data-action="toggle" data-id="${esc(w.id)}">
-        ${w.done ? "✓" : ""}
-      </button>
-      <div class="content">
-        ${esc(w.text)}
-        <div class="meta">${esc(w.author)} · ${esc(w.date)}</div>
+  notesEl.innerHTML = items.map(item => `
+    <div class="note ${item.done ? "done" : ""}">
+      <input type="checkbox" aria-label="Выполнено"
+        ${item.done ? "checked" : ""}
+        onchange="toggleNote(${Number(item.id)},this.checked)">
+      <div class="note-body">
+        <div class="note-text">${escapeHTML(item.text)}</div>
+        <div class="meta">${escapeHTML(item.author || "Мы")}</div>
       </div>
-      <button class="remove" data-action="remove"
-        data-id="${esc(w.id)}" aria-label="Удалить">×</button>
+      <button class="del" onclick="deleteNote(${Number(item.id)})">✕</button>
     </div>
   `).join("");
 }
 
-$("add").addEventListener("click", () => {
-  const text = $("note").value.trim();
+document.getElementById("add").addEventListener("click", async () => {
+  const text = noteEl.value.trim();
   if (!text) {
-    $("note").focus();
+    noteEl.focus();
     return;
   }
-
-  wishes.unshift({
-    id: Date.now().toString() + Math.random().toString(36).slice(2),
-    text,
-    author: $("author").value,
-    date: new Date().toLocaleDateString("ru-RU"),
-    done: false
-  });
-
-  $("note").value = "";
-  save();
-});
-
-$("list").addEventListener("click", e => {
-  const button = e.target.closest("button[data-action]");
-  if (!button) return;
-
-  const index = wishes.findIndex(w => w.id === button.dataset.id);
-  if (index < 0) return;
-
-  if (button.dataset.action === "toggle") {
-    wishes[index].done = !wishes[index].done;
-  } else if (button.dataset.action === "remove") {
-    if (!confirm("Удалить это желание?")) return;
-    wishes.splice(index, 1);
+  if (SUPABASE_ANON_KEY === "PASTE_YOUR_SB_PUBLISHABLE_KEY_HERE") {
+    statusEl.textContent = "Сначала вставь ключ Supabase в код.";
+    return;
   }
-
-  save();
+  busy = true;
+  statusEl.textContent = "Добавляем…";
+  try {
+    await request("couple_notes", {
+      method: "POST",
+      headers: {"Prefer":"return=minimal"},
+      body: JSON.stringify({
+        room_id: ROOM_ID,
+        text,
+        author: authorEl.value,
+        done: false
+      })
+    });
+    noteEl.value = "";
+    await loadNotes();
+  } catch (error) {
+    statusEl.textContent = "Не получилось добавить. Проверь настройки Supabase.";
+    console.error(error);
+  } finally {
+    busy = false;
+  }
 });
 
-render();
+window.toggleNote = async (id, done) => {
+  try {
+    await request("couple_notes?id=eq." + id + "&room_id=eq." + encodeURIComponent(ROOM_ID), {
+      method: "PATCH",
+      headers: {"Prefer":"return=minimal"},
+      body: JSON.stringify({done})
+    });
+    await loadNotes();
+  } catch (error) {
+    statusEl.textContent = "Не удалось обновить заметку.";
+  }
+};
+
+window.deleteNote = async (id) => {
+  if (!confirm("Удалить эту запись из вашего списка?")) return;
+  try {
+    await request("couple_notes?id=eq." + id + "&room_id=eq." + encodeURIComponent(ROOM_ID), {
+      method: "DELETE"
+    });
+    await loadNotes();
+  } catch (error) {
+    statusEl.textContent = "Не удалось удалить заметку.";
+  }
+};
+
+loadNotes();
+setInterval(loadNotes, 10000);
 </script>
 </body>
 </html>
