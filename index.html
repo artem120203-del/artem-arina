@@ -9,12 +9,12 @@
 :root{--rose:#a85d68;--ink:#332d2d;--muted:#8b7d7d}
 *{box-sizing:border-box}
 body{margin:0;padding:16px 12px 32px;background:#f8f5f2;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
-main{max-width:560px;margin:auto}
+main{max-width:560px;margin:auto;position:relative;z-index:1}
 header{text-align:center;padding:20px 0 24px}
 .heart{font-size:35px}
 h1{font-size:29px;margin:8px 0}
 .subtitle{color:var(--muted);font-size:14px}
-.card{background:#fff;border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 5px 24px #3b202008}
+.card{background:rgba(255,255,255,.94);backdrop-filter:blur(3px);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 5px 24px #3b202008}
 label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
 textarea,select{width:100%;border:1px solid #eadfdd;background:#fffdfc;border-radius:12px;padding:12px;font:inherit;color:var(--ink)}
 textarea{resize:vertical;min-height:78px}
@@ -42,9 +42,49 @@ audio{width:100%;margin-top:10px}
 .status{text-align:center;color:#998888;font-size:12px;padding:8px;line-height:1.5}
 .small{font-size:12px;color:#9b8c8c;text-align:center;line-height:1.5}
 button:disabled{opacity:.55}
+
+/* Фон из 130 живых сердечек */
+#heart-field{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:0;
+  contain:strict;
+}
+.bg-heart{
+  position:absolute;
+  display:block;
+  color:#e8a0b0;
+  line-height:1;
+  opacity:var(--heart-opacity,.25);
+  font-size:var(--heart-size,12px);
+  transform:scale(.9);
+  animation:heart-twinkle var(--twinkle-speed,3s)
+    ease-in-out var(--twinkle-delay,0s) infinite alternate;
+  will-change:transform,opacity;
+}
+.bg-heart.pulse{
+  animation:heart-beat .7s ease-in-out var(--pulse-delay,0ms) both;
+}
+@keyframes heart-twinkle{
+  from{opacity:.10;transform:scale(.78)}
+  to{opacity:.45;transform:scale(1)}
+}
+@keyframes heart-beat{
+  0%{opacity:.16;transform:scale(.8)}
+  35%{opacity:.88;transform:scale(1.5)}
+  65%{opacity:.62;transform:scale(1.12)}
+  100%{opacity:var(--heart-opacity,.25);transform:scale(.9)}
+}
+@media(prefers-reduced-motion:reduce){
+  .bg-heart{animation:none!important}
+}
 </style>
 </head>
 <body>
+<div id="heart-field" aria-hidden="true"></div>
+
 <main>
 <header>
 <div class="heart">🤍</div>
@@ -384,6 +424,61 @@ window.deleteNote = async id => {
 
 loadNotes();
 setInterval(loadNotes, 10000);
+
+/* Создаём сердечки и запускаем реакцию на касания */
+(() => {
+  const field = $("heart-field");
+  if (!field) return;
+
+  const COUNT = 130;
+  const hearts = [];
+  let lastPulse = 0;
+  let scrollTimer = null;
+  let pulseTimer = null;
+
+  for (let i = 0; i < COUNT; i++) {
+    const heart = document.createElement("span");
+    heart.className = "bg-heart";
+    heart.textContent = "♥";
+
+    const opacity = (0.16 + Math.random() * 0.24).toFixed(2);
+    heart.style.left = (Math.random() * 98) + "%";
+    heart.style.top = (Math.random() * 98) + "%";
+    heart.style.setProperty("--heart-size", (7 + Math.random() * 9).toFixed(1) + "px");
+    heart.style.setProperty("--heart-opacity", opacity);
+    heart.style.setProperty("--twinkle-speed", (2.2 + Math.random() * 3).toFixed(2) + "s");
+    heart.style.setProperty("--twinkle-delay", (-Math.random() * 5).toFixed(2) + "s");
+    heart.style.setProperty("--pulse-delay", ((i % 26) * 8) + "ms");
+
+    field.appendChild(heart);
+    hearts.push(heart);
+  }
+
+  function pulseHearts() {
+    const now = Date.now();
+    if (now - lastPulse < 180) return;
+    lastPulse = now;
+
+    hearts.forEach(heart => heart.classList.remove("pulse"));
+    void field.offsetWidth;
+    hearts.forEach(heart => heart.classList.add("pulse"));
+
+    clearTimeout(pulseTimer);
+    pulseTimer = setTimeout(() => {
+      hearts.forEach(heart => heart.classList.remove("pulse"));
+    }, 900);
+  }
+
+  document.addEventListener("pointerdown", pulseHearts, {
+    passive: true,
+    capture: true
+  });
+
+  window.addEventListener("scroll", () => {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(pulseHearts, 90);
+  }, {passive:true});
+})();
 </script>
 </body>
 </html>
