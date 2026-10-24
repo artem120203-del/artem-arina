@@ -1,12 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f5f2">
 <title>Артём + Арина 🤍</title>
 <style>
-:root{--rose:#a85d68;--ink:#332d2d;--muted:#8b7d7d}
+:root{--rose:#a85d68;--ink:#332d2d;--muted:#8b7d7d;--line:#f0e7e4}
 *{box-sizing:border-box}
 body{margin:0;padding:16px 12px 32px;background:#f8f5f2;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif}
 main{max-width:560px;margin:auto;position:relative;z-index:1}
@@ -16,18 +16,18 @@ h1{font-size:29px;margin:8px 0}
 .subtitle{color:var(--muted);font-size:14px}
 .card{background:rgba(255,255,255,.94);backdrop-filter:blur(3px);border-radius:20px;padding:16px;margin-bottom:14px;box-shadow:0 5px 24px #3b202008}
 label{display:block;font-size:13px;color:var(--muted);margin-bottom:8px}
-textarea,select{width:100%;border:1px solid #eadfdd;background:#fffdfc;border-radius:12px;padding:12px;font:inherit;color:var(--ink)}
+textarea,select,input[type="date"],input[type="text"]{width:100%;border:1px solid #eadfdd;background:#fffdfc;border-radius:12px;padding:12px;font:inherit;color:var(--ink)}
 textarea{resize:vertical;min-height:78px}
 button{border:0;border-radius:12px;padding:12px;font:inherit;font-weight:600;cursor:pointer}
 .primary{background:var(--rose);color:white;width:100%;margin-top:10px}
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 .secondary{background:#f8eeee;color:var(--rose);width:100%}
-#fileInput{display:none}
+#fileInput,#calendarFileInput{display:none}
 #preview{display:none;margin-top:10px;max-width:100%;max-height:180px;border-radius:12px}
 #recording{display:none;color:#a13f4d;font-size:13px;margin-top:9px}
 h2{font-size:18px;margin:0 0 12px}
-.note{border:1px solid #f0e7e4;border-radius:15px;padding:12px;margin-top:10px;display:flex;gap:9px;align-items:flex-start;background:#fff}
-.avatar{width:42px;height:42px;flex:0 0 42px;border-radius:50%;object-fit:cover;background:#f2e6e4;border:1px solid #f0e7e4}
+.note{border:1px solid var(--line);border-radius:15px;padding:12px;margin-top:10px;display:flex;gap:9px;align-items:flex-start;background:#fff}
+.avatar{width:42px;height:42px;flex:0 0 42px;border-radius:50%;object-fit:cover;background:#f2e6e4;border:1px solid var(--line)}
 .note-main{flex:1;min-width:0}
 .note-head{display:flex;align-items:center;font-size:13px;font-weight:700;margin:2px 0 7px}
 .note-text{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.45}
@@ -42,49 +42,44 @@ audio{width:100%;margin-top:10px}
 .status{text-align:center;color:#998888;font-size:12px;padding:8px;line-height:1.5}
 .small{font-size:12px;color:#9b8c8c;text-align:center;line-height:1.5}
 button:disabled{opacity:.55}
-
-/* Фон из 130 живых сердечек */
-#heart-field{
-  position:fixed;
-  inset:0;
-  overflow:hidden;
-  pointer-events:none;
-  z-index:0;
-  contain:strict;
-}
-.bg-heart{
-  position:absolute;
-  display:block;
-  color:#e8a0b0;
-  line-height:1;
-  opacity:var(--heart-opacity,.25);
-  font-size:var(--heart-size,12px);
-  transform:scale(.9);
-  animation:heart-twinkle var(--twinkle-speed,3s)
-    ease-in-out var(--twinkle-delay,0s) infinite alternate;
-  will-change:transform,opacity;
-}
-.bg-heart.pulse{
-  animation:heart-beat .7s ease-in-out var(--pulse-delay,0ms) both;
-}
-@keyframes heart-twinkle{
-  from{opacity:.10;transform:scale(.78)}
-  to{opacity:.45;transform:scale(1)}
-}
-@keyframes heart-beat{
-  0%{opacity:.16;transform:scale(.8)}
-  35%{opacity:.88;transform:scale(1.5)}
-  65%{opacity:.62;transform:scale(1.12)}
-  100%{opacity:var(--heart-opacity,.25);transform:scale(.9)}
-}
-@media(prefers-reduced-motion:reduce){
-  .bg-heart{animation:none!important}
-}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.section-heading h2{margin:0}
+.month-nav{display:flex;align-items:center;gap:7px}
+.month-nav button{background:#f8eeee;color:var(--rose);padding:8px 11px;font-size:16px}
+.month-label{font-size:13px;font-weight:700;white-space:nowrap;text-transform:capitalize}
+.calendar-intro{font-size:13px;color:var(--muted);line-height:1.5;margin:8px 0 14px}
+.weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.weekday{text-align:center;color:#a18f8f;font-size:10px;padding:3px 0 5px}
+.calendar-day{min-width:0;padding:0;background:#fff9f8;border:1px solid #f0e3e1;border-radius:9px;overflow:hidden;color:var(--ink);font-weight:500;display:flex;flex-direction:column;gap:0;position:relative;aspect-ratio:.78}
+.calendar-day:active{transform:scale(.97)}
+.calendar-day.selected{border:2px solid var(--rose);box-shadow:0 0 0 2px #a85d681a}
+.calendar-day.today .day-number{color:var(--rose);font-weight:800}
+.day-image{display:block;width:100%;height:calc(100% - 23px);min-height:35px;object-fit:cover;background:#f7eeec}
+.day-placeholder{height:calc(100% - 23px);min-height:35px;display:flex;align-items:center;justify-content:center;color:#d0aaa9;font-size:18px;background:linear-gradient(145deg,#fffaf9,#f7eae9)}
+.day-number{height:23px;flex:0 0 23px;display:flex;align-items:center;justify-content:center;font-size:10px;background:#fffdfc}
+.calendar-day.has-photo .day-number{background:#fff8f7}
+.calendar-empty{aspect-ratio:.78}
+.selected-photo{margin-top:16px;border-top:1px solid #f0e7e4;padding-top:15px}
+.selected-date{font-size:13px;color:var(--muted);margin-bottom:10px}
+.large-memory{display:block;width:100%;max-height:470px;object-fit:contain;background:#f8f1ef;border-radius:15px}
+.no-memory{border:1px dashed #e7d5d3;border-radius:15px;text-align:center;padding:25px 12px;color:#a39393;font-size:13px;line-height:1.6}
+.caption{font-size:14px;line-height:1.5;margin-top:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.calendar-form{border-top:1px solid #f0e7e4;margin-top:15px;padding-top:14px}
+.calendar-form .tools{margin-top:8px}
+.calendar-hint{font-size:12px;color:#a39393;line-height:1.5;margin-top:8px}
+.calendar-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.calendar-actions button{width:100%}
+#heart-field{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;contain:strict}
+.bg-heart{position:absolute;display:block;color:#e8a0b0;line-height:1;opacity:var(--heart-opacity,.25);font-size:var(--heart-size,12px);transform:scale(.9);animation:heart-twinkle var(--twinkle-speed,3s) ease-in-out var(--twinkle-delay,0s) infinite alternate;will-change:transform,opacity}
+.bg-heart.pulse{animation:heart-beat .7s ease-in-out var(--pulse-delay,0ms) both}
+@keyframes heart-twinkle{from{opacity:.10;transform:scale(.78)}to{opacity:.45;transform:scale(1)}}
+@keyframes heart-beat{0%{opacity:.16;transform:scale(.8)}35%{opacity:.88;transform:scale(1.5)}65%{opacity:.62;transform:scale(1.12)}100%{opacity:var(--heart-opacity,.25);transform:scale(.9)}}
+@media(max-width:360px){.weekdays,.calendar-grid{gap:3px}.calendar-day,.calendar-empty{border-radius:6px}.day-number{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.bg-heart{animation:none!important}}
 </style>
 </head>
 <body>
 <div id="heart-field" aria-hidden="true"></div>
-
 <main>
 <header>
 <div class="heart">🤍</div>
@@ -94,10 +89,7 @@ button:disabled{opacity:.55}
 
 <section class="card">
 <label for="author">Кто добавляет?</label>
-<select id="author">
-<option value="Артём">Артём</option>
-<option value="Арина">Арина</option>
-</select>
+<select id="author"><option value="Артём">Артём</option><option value="Арина">Арина</option></select>
 <div style="height:13px"></div>
 <label for="note">Что хотим сделать или сказать?</label>
 <textarea id="note" placeholder="Например: гулять ночью у моря, обняться и никуда не спешить..."></textarea>
@@ -115,6 +107,42 @@ button:disabled{opacity:.55}
 <button class="primary" id="addBtn">Добавить в наш список 🤍</button>
 </section>
 
+<section class="card" id="calendarCard">
+<div class="section-heading">
+<h2>Наш календарь 📅</h2>
+<div class="month-nav">
+<button type="button" id="prevMonth" aria-label="Предыдущий месяц">‹</button>
+<div class="month-label" id="monthLabel">Октябрь 2026</div>
+<button type="button" id="nextMonth" aria-label="Следующий месяц">›</button>
+</div>
+</div>
+<div class="calendar-intro">Моменты, которые хочется сохранить 🤍 Нажми на дату, чтобы посмотреть фото или добавить новое.</div>
+<div class="weekdays"><div class="weekday">ПН</div><div class="weekday">ВТ</div><div class="weekday">СР</div><div class="weekday">ЧТ</div><div class="weekday">ПТ</div><div class="weekday">СБ</div><div class="weekday">ВС</div></div>
+<div class="calendar-grid" id="calendarGrid"><div class="empty">Загружаем календарь…</div></div>
+<div class="selected-photo" id="selectedPhoto">
+<div class="selected-date" id="selectedDate"></div>
+<div id="selectedPhotoContent"></div>
+<div class="calendar-form">
+<label for="calendarDate">Дата выбранного момента</label>
+<input type="date" id="calendarDate">
+<label for="calendarFileInput" style="margin-top:12px">Фотография этого дня</label>
+<input id="calendarFileInput" type="file" accept="image/*">
+<button class="secondary" id="calendarChooseBtn" type="button">📷 Выбрать фотографию</button>
+<div id="calendarPreviewWrap" style="display:none;margin-top:10px">
+<img id="calendarPreview" alt="Предпросмотр выбранной фотографии" style="display:block;width:100%;max-height:240px;object-fit:contain;border-radius:12px;background:#f8f1ef">
+</div>
+<label for="calendarCaption" style="margin-top:12px">Подпись к фото (необязательно)</label>
+<textarea id="calendarCaption" maxlength="300" placeholder="Например: наш первый вечер у моря…"></textarea>
+<button class="primary" id="saveCalendarPhoto" type="button">Сохранить фото этого дня 🤍</button>
+<div class="calendar-hint">На каждую дату сохраняется одна фотография. Если выбрать другую, она заменит предыдущую.</div>
+<div class="calendar-actions">
+<button class="secondary" id="removeCalendarPhoto" type="button" style="display:none">Удалить фото</button>
+<button class="secondary" id="todayBtn" type="button">Сегодня</button>
+</div>
+</div>
+</div>
+</section>
+
 <section class="card">
 <h2>Наши планы ✨</h2>
 <div id="notes"><div class="empty">Загружаем список…</div></div>
@@ -128,12 +156,12 @@ const URL_BASE = "https://mtxzkfbryzdlsrpsykqj.supabase.co";
 const KEY = "sb_publishable_zKwooYPU5_sujM0mL5Iw_g__xNi0FRW";
 const ROOM = "artem-arina-private-room-7f3a9c2d-2026";
 const BUCKET = "couple-photos";
+const CALENDAR_TABLE = "couple_calendar_photos";
 
 const AVATARS = {
   "Артём": URL_BASE + "/storage/v1/object/public/" + BUCKET + "/5ECA4233-7031-4523-829D-4BB2D340F5B2.png",
   "Арина": URL_BASE + "/storage/v1/object/public/" + BUCKET + "/camphoto_959030623.jpeg"
 };
-
 const $ = id => document.getElementById(id);
 const notesEl = $("notes");
 const statusEl = $("status");
@@ -149,18 +177,23 @@ let chunks = [];
 let stream = null;
 let recordingCancelled = false;
 
+/* Calendar state */
+let calendarPhotos = [];
+let selectedDateValue = localISODate(new Date());
+let visibleMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let calendarSelectedFile = null;
+let calendarBusy = false;
+
 const headers = {
   apikey: KEY,
   Authorization: "Bearer " + KEY,
   "Content-Type": "application/json"
 };
-
 function escapeHTML(s) {
   return String(s ?? "").replace(/[&<>"']/g, c => ({
     "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
   }[c]));
 }
-
 async function api(path, options = {}) {
   const response = await fetch(URL_BASE + "/rest/v1/" + path, {
     ...options,
@@ -171,313 +204,337 @@ async function api(path, options = {}) {
   const body = await response.text();
   return body ? JSON.parse(body) : null;
 }
+function localISODate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+function formatLongDate(dateStr) {
+  const [y,m,d] = dateStr.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("ru-RU", {
+    weekday:"long", day:"numeric", month:"long", year:"numeric"
+  });
+}
+function getPhotoForDate(dateStr) {
+  return calendarPhotos.find(p => p.photo_date === dateStr) || null;
+}
+async function loadCalendarPhotos() {
+  try {
+    const photos = await api(
+      CALENDAR_TABLE + "?room_id=eq." + encodeURIComponent(ROOM) +
+      "&select=id,room_id,photo_date,photo_url,caption,created_at&order=photo_date.asc"
+    );
+    calendarPhotos = photos || [];
+    renderCalendar();
+    updateSelectedPhoto();
+  } catch (e) {
+    console.error(e);
+    $("calendarGrid").innerHTML = '<div class="empty" style="grid-column:1/-1">Не удалось загрузить календарь. Проверь, что таблица couple_calendar_photos создана в Supabase.</div>';
+    statusEl.textContent = "Календарь не загрузился: " + String(e.message).slice(0,160);
+  }
+}
+function renderCalendar() {
+  const y = visibleMonth.getFullYear();
+  const m = visibleMonth.getMonth();
+  $("monthLabel").textContent = visibleMonth.toLocaleDateString("ru-RU", {month:"long",year:"numeric"});
+  const first = new Date(y,m,1);
+  const offset = (first.getDay()+6)%7;
+  const count = new Date(y,m+1,0).getDate();
+  const today = localISODate(new Date());
+  let html = "";
+  for(let i=0;i<offset;i++) html += '<div class="calendar-empty"></div>';
+  for(let day=1;day<=count;day++) {
+    const dateStr = `${y}-${String(m+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+    const photo = getPhotoForDate(dateStr);
+    const classes = ["calendar-day"];
+    if(dateStr===selectedDateValue) classes.push("selected");
+    if(dateStr===today) classes.push("today");
+    if(photo) classes.push("has-photo");
+    const visual = photo
+      ? `<img class="day-image" src="${escapeHTML(photo.photo_url)}" alt="Фото за ${day} число" loading="lazy">`
+      : '<div class="day-placeholder">＋</div>';
+    html += `<button type="button" class="${classes.join(" ")}" data-date="${dateStr}" aria-label="${day} ${photo?"есть фото":"нет фото"}">${visual}<span class="day-number">${day}</span></button>`;
+  }
+  const total = offset+count;
+  const trailing = (7-total%7)%7;
+  for(let i=0;i<trailing;i++) html += '<div class="calendar-empty"></div>';
+  $("calendarGrid").innerHTML = html;
+  $("calendarGrid").querySelectorAll("[data-date]").forEach(button => {
+    button.addEventListener("click",()=>selectCalendarDate(button.dataset.date));
+  });
+}
+function selectCalendarDate(dateStr) {
+  selectedDateValue = dateStr;
+  const [y,m] = dateStr.split("-").map(Number);
+  visibleMonth = new Date(y,m-1,1);
+  calendarSelectedFile = null;
+  $("calendarFileInput").value = "";
+  $("calendarPreviewWrap").style.display = "none";
+  $("calendarPreview").removeAttribute("src");
+  $("calendarDate").value = dateStr;
+  $("calendarCaption").value = getPhotoForDate(dateStr)?.caption || "";
+  renderCalendar();
+  updateSelectedPhoto();
+}
+function updateSelectedPhoto() {
+  $("selectedDate").textContent = formatLongDate(selectedDateValue);
+  $("calendarDate").value = selectedDateValue;
+  const photo = getPhotoForDate(selectedDateValue);
+  if(photo) {
+    $("selectedPhotoContent").innerHTML =
+      `<img class="large-memory" src="${escapeHTML(photo.photo_url)}" alt="Фото за ${escapeHTML(formatLongDate(selectedDateValue))}">` +
+      (photo.caption ? `<div class="caption">${escapeHTML(photo.caption)}</div>` : "");
+    $("removeCalendarPhoto").style.display = "block";
+    $("calendarCaption").value = photo.caption || "";
+  } else {
+    $("selectedPhotoContent").innerHTML = '<div class="no-memory">Здесь пока нет фотографии 🤍<br>Выбери снимок ниже, чтобы сохранить этот момент.</div>';
+    $("removeCalendarPhoto").style.display = "none";
+    $("calendarCaption").value = "";
+  }
+}
+$("prevMonth").addEventListener("click",()=>{
+  visibleMonth = new Date(visibleMonth.getFullYear(),visibleMonth.getMonth()-1,1);
+  renderCalendar();
+});
+$("nextMonth").addEventListener("click",()=>{
+  visibleMonth = new Date(visibleMonth.getFullYear(),visibleMonth.getMonth()+1,1);
+  renderCalendar();
+});
+$("calendarDate").addEventListener("change",()=>{
+  if(!$("calendarDate").value)return;
+  selectCalendarDate($("calendarDate").value);
+});
+$("todayBtn").addEventListener("click",()=>selectCalendarDate(localISODate(new Date())));
+$("calendarChooseBtn").addEventListener("click",()=>$("calendarFileInput").click());
+$("calendarFileInput").addEventListener("change",()=>{
+  const file=$("calendarFileInput").files?.[0];
+  if(!file)return;
+  if(!file.type.startsWith("image/")) {
+    statusEl.textContent="Выбери изображение.";
+    $("calendarFileInput").value="";
+    return;
+  }
+  if(file.size>15*1024*1024) {
+    statusEl.textContent="Фото должно быть меньше 15 МБ.";
+    $("calendarFileInput").value="";
+    return;
+  }
+  calendarSelectedFile=file;
+  $("calendarPreview").src=URL.createObjectURL(file);
+  $("calendarPreviewWrap").style.display="block";
+  statusEl.textContent="Фото выбрано. Нажми «Сохранить фото этого дня».";
+});
+$("saveCalendarPhoto").addEventListener("click",async()=>{
+  if(calendarBusy)return;
+  const file=calendarSelectedFile;
+  const existing=getPhotoForDate(selectedDateValue);
+  const caption=$("calendarCaption").value.trim();
+  if(!file&&!existing) {
+    statusEl.textContent="Сначала выбери фотографию.";
+    return;
+  }
+  calendarBusy=true;
+  $("saveCalendarPhoto").disabled=true;
+  try {
+    let photoUrl=existing?.photo_url || "";
+    if(file) {
+      statusEl.textContent="Загружаем фотографию…";
+      photoUrl=await uploadCalendarPhoto(file,selectedDateValue);
+    }
+    statusEl.textContent="Сохраняем фотографию в календаре…";
+    await api(CALENDAR_TABLE+"?on_conflict=room_id,photo_date",{
+      method:"POST",
+      headers:{"Prefer":"resolution=merge-duplicates,return=representation"},
+      body:JSON.stringify({
+        room_id:ROOM,
+        photo_date:selectedDateValue,
+        photo_url:photoUrl,
+        caption
+      })
+    });
+    calendarSelectedFile=null;
+    $("calendarFileInput").value="";
+    $("calendarPreviewWrap").style.display="none";
+    $("calendarPreview").removeAttribute("src");
+    await loadCalendarPhotos();
+    statusEl.textContent="Фото сохранено в календаре 🤍";
+  } catch(e) {
+    console.error(e);
+    statusEl.textContent="Не получилось сохранить фото: "+String(e.message).slice(0,200);
+  } finally {
+    calendarBusy=false;
+    $("saveCalendarPhoto").disabled=false;
+  }
+});
+async function uploadCalendarPhoto(file, dateStr) {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = ROOM + "/calendar/" + dateStr + "-" + Date.now() + "-" + Math.random().toString(36).slice(2,8) + "-" + safeName;
+  const response = await fetch(
+    URL_BASE + "/storage/v1/object/" + BUCKET + "/" + path.split("/").map(encodeURIComponent).join("/"),
+    {method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":file.type || "application/octet-stream"},body:file}
+  );
+  if(!response.ok) throw new Error(await response.text());
+  return URL_BASE + "/storage/v1/object/public/" + BUCKET + "/" + path.split("/").map(encodeURIComponent).join("/");
+}
+$("removeCalendarPhoto").addEventListener("click", async () => {
+  const photo = getPhotoForDate(selectedDateValue);
+  if(!photo || !confirm("Удалить фотографию за " + formatLongDate(selectedDateValue) + "?")) return;
+  try {
+    const response = await fetch(URL_BASE + "/rest/v1/" + CALENDAR_TABLE +
+      "?room_id=eq." + encodeURIComponent(ROOM) + "&photo_date=eq." + encodeURIComponent(selectedDateValue), {
+      method:"DELETE",headers:{...headers,"Prefer":"return=minimal"}
+    });
+    if(!response.ok) throw new Error(await response.text());
+    await loadCalendarPhotos();
+    statusEl.textContent = "Фотография удалена из календаря.";
+  } catch(e) {
+    console.error(e);
+    statusEl.textContent = "Не удалось удалить фото: " + String(e.message).slice(0,160);
+  }
+});
 
 async function loadNotes() {
   if (busy) return;
   try {
-    const items = await api(
-      "couple_notes?room_id=eq." + encodeURIComponent(ROOM) +
-      "&select=id,text,author,done,created_at,attachment_url,attachment_type&order=created_at.desc"
-    );
-    render(items || []);
-    statusEl.textContent = "Список синхронизирован 🤍";
-  } catch (e) {
+    const items = await api("couple_notes?room_id=eq." + encodeURIComponent(ROOM) +
+      "&select=id,text,author,done,created_at,attachment_url,attachment_type&order=created_at.desc");
+    renderNotes(items || []);
+    statusEl.textContent = "Список и календарь синхронизированы 🤍";
+  } catch(e) {
     console.error(e);
-    statusEl.textContent = "Ошибка загрузки. " +
-      (String(e.message).includes("attachment_url")
-       ? "Проверь столбцы вложений в Supabase."
-       : "Проверь настройки Supabase.");
+    statusEl.textContent = "Ошибка загрузки списка. " +
+      (String(e.message).includes("attachment_url") ? "Проверь столбцы вложений в Supabase." : "Проверь настройки Supabase.");
   }
 }
-
-function render(items) {
+function renderNotes(items) {
   if (!items.length) {
     notesEl.innerHTML = '<div class="empty">Пока здесь пусто. Добавьте первое желание 🤍</div>';
     return;
   }
-
   notesEl.innerHTML = items.map(item => {
     const author = item.author === "Арина" ? "Арина" : "Артём";
     const avatar = AVATARS[author];
     let attachment = "";
     const url = item.attachment_url || "";
-
-    if (url && item.attachment_type === "image") {
+    if(url && item.attachment_type === "image") {
       attachment = `<a href="${escapeHTML(url)}" target="_blank" rel="noopener"><img class="attachment" src="${escapeHTML(url)}" alt="Фото" loading="lazy"></a>`;
-    } else if (url && item.attachment_type === "audio") {
+    } else if(url && item.attachment_type === "audio") {
       attachment = `<audio controls preload="none" src="${escapeHTML(url)}"></audio>`;
     }
-
-    const date = item.created_at
-      ? new Date(item.created_at).toLocaleString("ru-RU", {
-          day:"numeric", month:"short", hour:"2-digit", minute:"2-digit"
-        })
-      : "";
-
-    return `<article class="note ${item.done ? "done" : ""}">
+    const date = item.created_at ? new Date(item.created_at).toLocaleString("ru-RU",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}) : "";
+    return `<article class="note ${item.done?"done":""}">
       <img class="avatar" src="${escapeHTML(avatar)}" alt="${escapeHTML(author)}">
-      <div class="note-main">
-        <div class="note-head">${escapeHTML(author)}</div>
-        ${item.text ? `<div class="note-text">${escapeHTML(item.text)}</div>` : ""}
-        ${attachment}
+      <div class="note-main"><div class="note-head">${escapeHTML(author)}</div>
+        ${item.text ? `<div class="note-text">${escapeHTML(item.text)}</div>` : ""}${attachment}
         <div class="meta">${escapeHTML(date)}</div>
       </div>
       <div class="actions">
-        <input class="check" type="checkbox" aria-label="Выполнено"
-          ${item.done ? "checked" : ""}
-          onchange="toggleNote(${Number(item.id)},this.checked)">
+        <input class="check" type="checkbox" aria-label="Выполнено" ${item.done?"checked":""} onchange="toggleNote(${Number(item.id)},this.checked)">
         <button class="del" onclick="deleteNote(${Number(item.id)})">✕</button>
       </div>
     </article>`;
   }).join("");
 }
-
-$("photoBtn").addEventListener("click", () => {
-  fileInput.accept = "image/*";
-  fileInput.click();
-});
-
+$("photoBtn").addEventListener("click", () => {fileInput.accept="image/*";fileInput.click();});
 fileInput.addEventListener("change", () => {
   const file = fileInput.files && fileInput.files[0];
-  if (!file) return;
-  if (!file.type.startsWith("image/")) {
-    statusEl.textContent = "Выбери изображение.";
-    return;
-  }
-  if (file.size > 15 * 1024 * 1024) {
-    statusEl.textContent = "Фото должно быть меньше 15 МБ.";
-    fileInput.value = "";
-    return;
-  }
-  selectedFile = file;
-  preview.src = URL.createObjectURL(file);
-  preview.style.display = "block";
-  statusEl.textContent = "Фото выбрано. Теперь нажми «Добавить в наш список».";
+  if(!file) return;
+  if(!file.type.startsWith("image/")) {statusEl.textContent="Выбери изображение.";return;}
+  if(file.size>15*1024*1024) {statusEl.textContent="Фото должно быть меньше 15 МБ.";fileInput.value="";return;}
+  selectedFile=file;preview.src=URL.createObjectURL(file);preview.style.display="block";
+  statusEl.textContent="Фото выбрано. Теперь нажми «Добавить в наш список».";
 });
-
 function showRecording(active) {
-  $("recording").style.display = active ? "block" : "none";
-  $("recordTools").style.display = active ? "grid" : "none";
-  $("recordBtn").style.display = active ? "none" : "block";
+  $("recording").style.display=active?"block":"none";
+  $("recordTools").style.display=active?"grid":"none";
+  $("recordBtn").style.display=active?"none":"block";
 }
-
-$("recordBtn").addEventListener("click", async () => {
-  if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
-    statusEl.textContent = "Запись не поддерживается. Открой сайт в Safari на iPhone.";
-    return;
-  }
-
+$("recordBtn").addEventListener("click",async()=>{
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){statusEl.textContent="Запись не поддерживается. Открой сайт в Safari на iPhone.";return;}
   try {
-    stream = await navigator.mediaDevices.getUserMedia({audio:true});
-    let mime = "";
-    if (MediaRecorder.isTypeSupported("audio/mp4")) mime = "audio/mp4";
-    else if (MediaRecorder.isTypeSupported("audio/webm")) mime = "audio/webm";
-
-    recorder = new MediaRecorder(stream, mime ? {mimeType:mime} : undefined);
-    chunks = [];
-    recordingCancelled = false;
-
-    recorder.ondataavailable = e => {
-      if (e.data && e.data.size) chunks.push(e.data);
+    stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    let mime="";
+    if(MediaRecorder.isTypeSupported("audio/mp4"))mime="audio/mp4";
+    else if(MediaRecorder.isTypeSupported("audio/webm"))mime="audio/webm";
+    recorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+    chunks=[];recordingCancelled=false;
+    recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+    recorder.onstop=()=>{
+      if(!recordingCancelled&&chunks.length){
+        const type=recorder.mimeType||"audio/mp4";const ext=type.includes("webm")?"webm":"m4a";
+        selectedFile=new File(chunks,"voice-message."+ext,{type});preview.style.display="none";
+        statusEl.textContent="Голосовое готово. Нажми «Добавить в наш список».";
+      }else statusEl.textContent="Запись отменена.";
+      if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;showRecording(false);
     };
-
-    recorder.onstop = () => {
-      if (!recordingCancelled && chunks.length) {
-        const type = recorder.mimeType || "audio/mp4";
-        const ext = type.includes("webm") ? "webm" : "m4a";
-        selectedFile = new File(chunks, "voice-message." + ext, {type});
-        preview.style.display = "none";
-        statusEl.textContent = "Голосовое готово. Нажми «Добавить в наш список».";
-      } else {
-        statusEl.textContent = "Запись отменена.";
-      }
-      if (stream) stream.getTracks().forEach(t => t.stop());
-      stream = null;
-      showRecording(false);
-    };
-
-    recorder.start();
-    showRecording(true);
-    statusEl.textContent = "Идёт запись…";
-  } catch (e) {
-    console.error(e);
-    statusEl.textContent = "Нет доступа к микрофону. Разреши доступ в настройках браузера.";
-  }
+    recorder.start();showRecording(true);statusEl.textContent="Идёт запись…";
+  } catch(e){console.error(e);statusEl.textContent="Нет доступа к микрофону. Разреши доступ в настройках браузера.";}
 });
-
-$("stopBtn").addEventListener("click", () => {
-  if (recorder && recorder.state !== "inactive") recorder.stop();
-});
-
-$("cancelBtn").addEventListener("click", () => {
-  recordingCancelled = true;
-  if (recorder && recorder.state !== "inactive") recorder.stop();
-  else showRecording(false);
-});
-
+$("stopBtn").addEventListener("click",()=>{if(recorder&&recorder.state!=="inactive")recorder.stop();});
+$("cancelBtn").addEventListener("click",()=>{recordingCancelled=true;if(recorder&&recorder.state!=="inactive")recorder.stop();else showRecording(false);});
 async function upload(file) {
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = ROOM + "/" + Date.now() + "-" +
-    Math.random().toString(36).slice(2, 9) + "-" + safeName;
-
-  const response = await fetch(
-    URL_BASE + "/storage/v1/object/" + BUCKET + "/" +
-    path.split("/").map(encodeURIComponent).join("/"),
-    {
-      method:"POST",
-      headers:{
-        apikey:KEY,
-        Authorization:"Bearer " + KEY,
-        "Content-Type":file.type || "application/octet-stream"
-      },
-      body:file
-    }
-  );
-
-  if (!response.ok) throw new Error(await response.text());
-  return URL_BASE + "/storage/v1/object/public/" + BUCKET + "/" +
-    path.split("/").map(encodeURIComponent).join("/");
+  const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const path=ROOM+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,9)+"-"+safeName;
+  const response=await fetch(URL_BASE+"/storage/v1/object/"+BUCKET+"/"+path.split("/").map(encodeURIComponent).join("/"),{
+    method:"POST",headers:{apikey:KEY,Authorization:"Bearer "+KEY,"Content-Type":file.type||"application/octet-stream"},body:file
+  });
+  if(!response.ok)throw new Error(await response.text());
+  return URL_BASE+"/storage/v1/object/public/"+BUCKET+"/"+path.split("/").map(encodeURIComponent).join("/");
 }
-
-$("addBtn").addEventListener("click", async () => {
-  const text = noteEl.value.trim();
-  const file = selectedFile;
-
-  if (!text && !file) {
-    statusEl.textContent = "Напиши текст или прикрепи фото/голосовое.";
-    return;
-  }
-
-  busy = true;
-  addBtn.disabled = true;
-
-  try {
-    let attachment_url = null;
-    let attachment_type = null;
-
-    if (file) {
-      statusEl.textContent = "Загружаем файл…";
-      attachment_url = await upload(file);
-      if (file.type.startsWith("image/")) attachment_type = "image";
-      else if (file.type.startsWith("audio/")) attachment_type = "audio";
+$("addBtn").addEventListener("click",async()=>{
+  const text=noteEl.value.trim();const file=selectedFile;
+  if(!text&&!file){statusEl.textContent="Напиши текст или прикрепи фото/голосовое.";return;}
+  busy=true;addBtn.disabled=true;
+  try{
+    let attachment_url=null,attachment_type=null;
+    if(file){statusEl.textContent="Загружаем файл…";attachment_url=await upload(file);
+      if(file.type.startsWith("image/"))attachment_type="image";
+      else if(file.type.startsWith("audio/"))attachment_type="audio";
       else throw new Error("Формат вложения не поддерживается.");
     }
-
-    statusEl.textContent = "Сохраняем запись…";
-    await api("couple_notes", {
-      method:"POST",
-      headers:{"Prefer":"return=minimal"},
-      body:JSON.stringify({
-        room_id:ROOM,
-        text,
-        author:authorEl.value,
-        done:false,
-        attachment_url,
-        attachment_type
-      })
-    });
-
-    noteEl.value = "";
-    fileInput.value = "";
-    selectedFile = null;
-    preview.removeAttribute("src");
-    preview.style.display = "none";
-    await loadNotes();
-  } catch (e) {
-    console.error(e);
-    statusEl.textContent = "Не получилось сохранить. " +
-      (String(e.message).includes("row-level security")
-       ? "Нужно проверить разрешения Supabase."
-       : String(e.message).slice(0,180));
-  } finally {
-    busy = false;
-    addBtn.disabled = false;
-  }
+    statusEl.textContent="Сохраняем запись…";
+    await api("couple_notes",{method:"POST",headers:{"Prefer":"return=minimal"},body:JSON.stringify({room_id:ROOM,text,author:authorEl.value,done:false,attachment_url,attachment_type})});
+    noteEl.value="";fileInput.value="";selectedFile=null;preview.removeAttribute("src");preview.style.display="none";await loadNotes();
+  }catch(e){console.error(e);statusEl.textContent="Не получилось сохранить. "+(String(e.message).includes("row-level security")?"Нужно проверить разрешения Supabase.":String(e.message).slice(0,180));}
+  finally{busy=false;addBtn.disabled=false;}
 });
-
-window.toggleNote = async (id, done) => {
-  try {
-    await api("couple_notes?id=eq." + id +
-      "&room_id=eq." + encodeURIComponent(ROOM), {
-      method:"PATCH",
-      headers:{"Prefer":"return=minimal"},
-      body:JSON.stringify({done})
-    });
-    await loadNotes();
-  } catch (e) {
-    statusEl.textContent = "Не удалось обновить запись.";
-    console.error(e);
-  }
+window.toggleNote=async(id,done)=>{
+  try{await api("couple_notes?id=eq."+id+"&room_id=eq."+encodeURIComponent(ROOM),{method:"PATCH",headers:{"Prefer":"return=minimal"},body:JSON.stringify({done})});await loadNotes();}
+  catch(e){statusEl.textContent="Не удалось обновить запись.";console.error(e);}
 };
-
-window.deleteNote = async id => {
-  if (!confirm("Удалить эту запись?")) return;
-  try {
-    await api("couple_notes?id=eq." + id +
-      "&room_id=eq." + encodeURIComponent(ROOM), {method:"DELETE"});
-    await loadNotes();
-  } catch (e) {
-    statusEl.textContent = "Не удалось удалить запись.";
-    console.error(e);
-  }
+window.deleteNote=async id=>{
+  if(!confirm("Удалить эту запись?"))return;
+  try{await api("couple_notes?id=eq."+id+"&room_id=eq."+encodeURIComponent(ROOM),{method:"DELETE"});await loadNotes();}
+  catch(e){statusEl.textContent="Не удалось удалить запись.";console.error(e);}
 };
-
 loadNotes();
-setInterval(loadNotes, 10000);
+loadCalendarPhotos();
+setInterval(()=>{loadNotes();loadCalendarPhotos();},10000);
 
 /* Создаём сердечки и запускаем реакцию на касания */
-(() => {
-  const field = $("heart-field");
-  if (!field) return;
-
-  const COUNT = 130;
-  const hearts = [];
-  let lastPulse = 0;
-  let scrollTimer = null;
-  let pulseTimer = null;
-
-  for (let i = 0; i < COUNT; i++) {
-    const heart = document.createElement("span");
-    heart.className = "bg-heart";
-    heart.textContent = "♥";
-
-    const opacity = (0.16 + Math.random() * 0.24).toFixed(2);
-    heart.style.left = (Math.random() * 98) + "%";
-    heart.style.top = (Math.random() * 98) + "%";
-    heart.style.setProperty("--heart-size", (7 + Math.random() * 9).toFixed(1) + "px");
-    heart.style.setProperty("--heart-opacity", opacity);
-    heart.style.setProperty("--twinkle-speed", (2.2 + Math.random() * 3).toFixed(2) + "s");
-    heart.style.setProperty("--twinkle-delay", (-Math.random() * 5).toFixed(2) + "s");
-    heart.style.setProperty("--pulse-delay", ((i % 26) * 8) + "ms");
-
-    field.appendChild(heart);
-    hearts.push(heart);
+(()=>{
+  const field=$("heart-field");if(!field)return;
+  const COUNT=130,hearts=[];let lastPulse=0,scrollTimer=null,pulseTimer=null;
+  for(let i=0;i<COUNT;i++){
+    const heart=document.createElement("span");heart.className="bg-heart";heart.textContent="♥";
+    const opacity=(.16+Math.random()*.24).toFixed(2);
+    heart.style.left=(Math.random()*98)+"%";heart.style.top=(Math.random()*98)+"%";
+    heart.style.setProperty("--heart-size",(7+Math.random()*9).toFixed(1)+"px");
+    heart.style.setProperty("--heart-opacity",opacity);
+    heart.style.setProperty("--twinkle-speed",(2.2+Math.random()*3).toFixed(2)+"s");
+    heart.style.setProperty("--twinkle-delay",(-Math.random()*5).toFixed(2)+"s");
+    heart.style.setProperty("--pulse-delay",((i%26)*8)+"ms");
+    field.appendChild(heart);hearts.push(heart);
   }
-
-  function pulseHearts() {
-    const now = Date.now();
-    if (now - lastPulse < 180) return;
-    lastPulse = now;
-
-    hearts.forEach(heart => heart.classList.remove("pulse"));
-    void field.offsetWidth;
-    hearts.forEach(heart => heart.classList.add("pulse"));
-
-    clearTimeout(pulseTimer);
-    pulseTimer = setTimeout(() => {
-      hearts.forEach(heart => heart.classList.remove("pulse"));
-    }, 900);
+  function pulseHearts(){
+    const now=Date.now();if(now-lastPulse<180)return;lastPulse=now;
+    hearts.forEach(h=>h.classList.remove("pulse"));void field.offsetWidth;
+    hearts.forEach(h=>h.classList.add("pulse"));clearTimeout(pulseTimer);
+    pulseTimer=setTimeout(()=>hearts.forEach(h=>h.classList.remove("pulse")),900);
   }
-
-  document.addEventListener("pointerdown", pulseHearts, {
-    passive: true,
-    capture: true
-  });
-
-  window.addEventListener("scroll", () => {
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(pulseHearts, 90);
-  }, {passive:true});
+  document.addEventListener("pointerdown",pulseHearts,{passive:true,capture:true});
+  window.addEventListener("scroll",()=>{clearTimeout(scrollTimer);scrollTimer=setTimeout(pulseHearts,90);},{passive:true});
 })();
 </script>
 </body>
